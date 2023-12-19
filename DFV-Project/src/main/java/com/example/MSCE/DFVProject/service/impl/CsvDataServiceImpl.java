@@ -1,5 +1,7 @@
-package com.example.MSCE.DFVProject.business;
+package com.example.MSCE.DFVProject.service.impl;
 
+import com.example.MSCE.DFVProject.business.TransactionImmobiliere;
+import com.example.MSCE.DFVProject.service.CsvDataService;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import java.io.Reader;
@@ -8,14 +10,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvDataReader {
+public class CsvDataServiceImpl implements CsvDataService {
 
-    public void readCsvData(String filePath) {
+    public List<TransactionImmobiliere> readCsvData(String filePath) {
+        List<TransactionImmobiliere> transactions = new ArrayList<>();
+
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
              CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build()) { // Skip header
 
             String[] nextRecord;
-            List<TransactionImmobiliere> transactions = new ArrayList<>();
 
             while ((nextRecord = csvReader.readNext()) != null) {
                 TransactionImmobiliere transaction = new TransactionImmobiliere();
@@ -68,5 +71,7 @@ public class CsvDataReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return transactions;
     }
 }
