@@ -1,14 +1,21 @@
-package com.example.MSCE.DFVProject.business;
+package com.example.MSCE.DFVProject.service;
 
+import com.example.MSCE.DFVProject.business.TransactionImmobiliere;
+import com.example.MSCE.DFVProject.repository.TransactionImmobiliereRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import org.springframework.stereotype.Service;
+
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvDataReader {
+@Service
+public class CsvDataService {
+
+    private TransactionImmobiliereRepository repository;
 
     public void readCsvData(String filePath) {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath));
@@ -62,6 +69,7 @@ public class CsvDataReader {
                 transaction.setLatitude(nextRecord[39]);
 
                 transactions.add(transaction);
+                repository.save(transaction);
             }
 
             transactions.stream().limit(10).forEach(System.out::println);

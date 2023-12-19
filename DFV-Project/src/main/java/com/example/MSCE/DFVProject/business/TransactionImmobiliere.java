@@ -1,16 +1,18 @@
 package com.example.MSCE.DFVProject.business;
 
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "transaction_immobiliere")
 public class TransactionImmobiliere {
     @Id
     @GeneratedValue // Pour que le framework choisisse un ID unique
