@@ -1,9 +1,15 @@
+
 <template>
-  <Accueil/>
+<section>
+  <h1>Je suis la </h1>
+  <Form/>
+</section>
 </template>
+
 <script setup lang="ts">
-  import Accueil from './pages/Accueil.vue'
+
 </script>
+
 <style scoped lang="scss">
 
 </style>
