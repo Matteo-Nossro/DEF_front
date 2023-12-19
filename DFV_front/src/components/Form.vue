@@ -1,30 +1,46 @@
-
 <template>
-  <form @submit="props.submit">
+  <form @submit.prevent="handleSubmit" class="mx-auto p-6 bg-white rounded-lg shadow-md max-w-lg flex gap-2 flex-col ">
     <slot name="body">
-      <input v-model="longitude" name="longitude">
-      <input v-model="latitude" name="latitude">
-      <input v-model="rayon" name="rayon">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+        Coordonnées
+      </label>
+      <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
+             placeholder="longitude" name="longitude" type="number">
+      <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
+             placeholder="latitude" name="latitude" type="number">
+      <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
+             placeholder="rayon en m" name="rayon" type="number">
     </slot>
-
     <slot name="buttons">
-      <DefaultButton label="annuler" />
-      <DefaultButton label="submit" type="submit"/>
+      <!--      <DefaultButton label="annuler" />-->
+      <DefaultButton label="Rechercher"/>
     </slot>
   </form>
 </template>
 <script setup lang="ts">
 
-import {ref,defineProps} from "vue";
 import DefaultButton from "./DefaultButton.vue";
 
-const props = defineProps({
-  submit: Function
-})
+const emit = defineEmits<{
+  (event: 'submit', formValue :Record<string, any>[] ): void
+}>()
+const handleSubmit = () => {
+  let results: Record<string, any>[] = []
 
-const longitude = ref(0)
-const latitude = ref(0)
-const rayon = ref(0)
+  let resultTemp: Record<string, any>;
+
+  for (let i = 0; i < event.target.length; i++) {
+
+    if (event.target[i].tagName === 'INPUT' && event.target[i].name !== '') {
+      resultTemp = {
+        name: event.target[i].name,
+        value: event.target[i].value
+      }
+      results.push(resultTemp)
+    }
+  }
+  emit('submit', results)
+};
 
 </script>
 
