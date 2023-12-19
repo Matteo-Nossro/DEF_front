@@ -2,7 +2,7 @@
 <template>
 <section>
   <h1>Je suis la </h1>
-  <Form :submit="()=>console.log('je suis la')"/>
+  <Form/>
 </section>
 </template>
 

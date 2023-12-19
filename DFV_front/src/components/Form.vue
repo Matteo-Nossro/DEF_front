@@ -12,7 +12,6 @@
              placeholder="rayon en m" name="rayon" type="number">
     </slot>
     <slot name="buttons">
-      <!--      <DefaultButton label="annuler" />-->
       <DefaultButton label="Rechercher"/>
     </slot>
   </form>

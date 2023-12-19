@@ -1,6 +1,6 @@
 
 <template>
-  <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" type="submit" :value="props.label" @click="props.click">
+  <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full" :style="props.styles" type="submit" :value="props.label" @click="props.click">
 </template>
 <script setup lang="ts">
 
