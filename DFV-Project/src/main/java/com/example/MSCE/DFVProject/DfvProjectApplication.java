@@ -1,5 +1,6 @@
 package com.example.MSCE.DFVProject;
 
+import com.example.MSCE.DFVProject.service.CreatePdf;
 import com.example.MSCE.DFVProject.service.impl.CsvDataServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ public class DfvProjectApplication {
 		CsvDataServiceImpl reader = new CsvDataServiceImpl();
 		String filePath = "full.csv";
 		reader.readCsvData(filePath);
+		CreatePdf pdf = new CreatePdf();
 	}
 
 }
