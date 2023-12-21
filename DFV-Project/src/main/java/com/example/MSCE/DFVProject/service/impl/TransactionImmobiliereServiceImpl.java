@@ -10,10 +10,8 @@ import java.util.List;
 @Service
 public class TransactionImmobiliereServiceImpl implements TransactionImmobiliereService {
 
-    @Autowired
     private TransactionImmobiliereRepository repository;
 
-    @Autowired
     private CsvDataServiceImpl csvDataService;
 
     public void loadCsvDataToDatabase(String filePath) {
