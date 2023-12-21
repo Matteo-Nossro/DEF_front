@@ -2,22 +2,41 @@
   <div ref="mapContainer" class="map-container" />
   <div class="form">
     <Form
-      @submit="setCircleRadius"
+      @submit-form="handleSubmitForm"
+      :longitude="marker !== null ? marker.getLngLat().lng : 0"
+      :latitude="marker !== null ? marker.getLngLat().lat : 0"
+      :rayon="radius * 1000"
     />
   </div>
+
+  <Notifications
+    title="je suis la"
+    body="je suis la"
+    type="success"
+    :display="true"
+  />
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import maplibregl from 'maplibre-gl';
 import Form from './Form.vue';
+import Notifications from './Notifications.vue';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const mapContainer = ref(null);
 const map = ref(null);
 const marker = ref(null);
 const circle = ref(null);
-const center = [2.3522, 48.8566]; // Coordonnées de Paris, par exemple
+const center = [ 4.83242748730953,45.76024989812256]; // Coordonnées de Lyon, par exemple
+const  radius = ref(0.01);
+
+
+const handleSubmitForm = (formValue) => {
+  radius.value = parseInt(formValue.rayon) * 0.001;
+  setCircleRadius(parseInt(formValue.rayon) * 0.001);
+  console.log('formValue aeazeazea',formValue)
+}
 
 onMounted(() => {
   map.value = new maplibregl.Map({
@@ -30,9 +49,11 @@ onMounted(() => {
   map.value.on('click', (e) => {
 
     placeMarker(e);
-    setCircleRadius(0.01);
+    setCircleRadius(radius.value);
 
-    
+    console.log(marker.value.getLngLat().lng, marker.value.getLngLat().lat)
+
+
 
     // Ajoutez ici la logique pour créer ou ajuster le cercle
   });
