@@ -3,6 +3,7 @@
   <div class="form">
     <Form
       @submit-form="handleSubmitForm"
+      @get-localisation="getUserLocation"
       :longitude="marker !== null ? marker.getLngLat().lng : 0"
       :latitude="marker !== null ? marker.getLngLat().lat : 0"
       :rayon="radius * 1000"
@@ -28,15 +29,16 @@ const mapContainer = ref(null);
 const map = ref(null);
 const marker = ref(null);
 const circle = ref(null);
-const center = [ 4.83242748730953,45.76024989812256]; // Coordonnées de Lyon, par exemple
-const  radius = ref(0.01);
+const center = [4.83242748730953, 45.76024989812256]; // Coordonnées de Lyon, par exemple
+const radius = ref(0.01);
 
 
 const handleSubmitForm = (formValue) => {
+  placeMarker({ lngLat: { lng: parseFloat(formValue.longitude), lat: parseFloat(formValue.latitude) } })
   radius.value = parseInt(formValue.rayon) * 0.001;
   setCircleRadius(parseInt(formValue.rayon) * 0.001);
-  console.log('formValue aeazeazea',formValue)
-}
+  console.log('formValue aeazeazea', formValue);
+};
 
 onMounted(() => {
   map.value = new maplibregl.Map({
@@ -45,14 +47,14 @@ onMounted(() => {
     center: center,
     zoom: 13
   });
+  getUserLocation();
 
   map.value.on('click', (e) => {
 
     placeMarker(e);
     setCircleRadius(radius.value);
 
-    console.log(marker.value.getLngLat().lng, marker.value.getLngLat().lat)
-
+    console.log(marker.value.getLngLat().lng, marker.value.getLngLat().lat);
 
 
     // Ajoutez ici la logique pour créer ou ajuster le cercle
@@ -60,6 +62,37 @@ onMounted(() => {
 
   // Ajoutez la logique pour déplacer le marqueur et créer un cercle
 });
+
+const getUserLocation = (): void => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      displayUserLocation,
+      handleLocationError
+    );
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+};
+
+const displayUserLocation = (position: GeolocationPosition): void => {
+  const userCoordinates: [number, number] = [
+    position.coords.longitude,
+    position.coords.latitude
+  ];
+
+  if (map) {
+    map.value.flyTo({ center: userCoordinates, zoom: 12 });
+    placeMarker({ lngLat: { lng: userCoordinates[0], lat: userCoordinates[1] } })
+    setCircleRadius(radius.value);
+
+    // new maplibregl.Marker().setLngLat(userCoordinates).addTo(map.value);
+
+  }
+};
+
+const handleLocationError = (error: GeolocationPositionError): void => {
+  console.error("Error in getting user location:", error);
+};
 
 const setCircleRadius = (radius) => {
   if (marker.value) {
@@ -124,14 +157,16 @@ function createGeoJSONCircle(center, radiusInKm) {
   };
 }
 
-const placeMarker =(e)=>{
+const placeMarker = (e) => {
   if (marker.value) {
     marker.value.remove(); // Supprime le marqueur précédent
   }
   marker.value = new maplibregl.Marker()
     .setLngLat(e.lngLat)
     .addTo(map.value);
-}
+
+  map.value.flyTo({ center: [marker.value.getLngLat().lng, marker.value.getLngLat().lat] , zoom: 12 });
+};
 
 const removeMarker = () => {
   if (marker.value) {
@@ -178,6 +213,7 @@ const updateCircleRadius = (newRadius) => {
   height: 100vh;
   z-index: 2;
 }
+
 .form {
   position: absolute;
   top: 0;

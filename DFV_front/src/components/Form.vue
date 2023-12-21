@@ -12,8 +12,9 @@
              placeholder="rayon en mètres" name="rayon" type="text" v-model="localRayon">
     </slot>
     <slot name="buttons">
-      <DefaultButton label="Rechercher"/>
-      <DefaultButton label="générer votre rapport"/>
+      <DefaultButton type="input" label="Rechercher"/>
+      <DefaultButton type="button" label="utliser ma position actuel" :click="handleUpdateCurentLocation"/>
+      <DefaultButton type='button' label="générer votre rapport" />
     </slot>
   </form>
 </template>
@@ -30,10 +31,11 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'submitForm', {  } ): void
+  (event: 'getLocalisation',{} ): void
 }>()
-const localLongitude = ref<number>(props.longitude)
-const localLatitude = ref<number>(props.latitude)
-const localRayon = ref<number>(props.rayon)
+const localLongitude = ref<number>(props.longitude ?? 0)
+const localLatitude = ref<number>(props.latitude ?? 0)
+const localRayon = ref<number>(props.rayon ?? 0)
 
 watch(props, (newValue, oldValue) => {
   localLongitude.value = newValue.longitude
@@ -41,7 +43,9 @@ watch(props, (newValue, oldValue) => {
   localRayon.value = newValue.rayon
 })
 
-
+const handleUpdateCurentLocation = () => {
+  emit('getLocalisation')
+}
 const handleSubmit = () => {
   emit('submitForm', {longitude:localLongitude.value, latitude:localLatitude.value,rayon: localRayon.value})
   console.log(localLongitude.value, localLatitude.value, localRayon.value)
