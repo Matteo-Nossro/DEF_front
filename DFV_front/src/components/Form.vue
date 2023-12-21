@@ -5,41 +5,68 @@
         Coordonnées
       </label>
       <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
-             placeholder="longitude" name="longitude" type="number">
+             placeholder="longitude" name="longitude" type="text" v-model="localLongitude"  >
       <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
-             placeholder="latitude" name="latitude" type="number">
+             placeholder="latitude" name="latitude" type="text" v-model="localLatitude"  >
       <input class="mx-auto p-6 bg-white rounded-lg max-w-lg border-[1px] border-gray-500  h-[40px] text-black"
-             placeholder="rayon en m" name="rayon" type="number">
+             placeholder="rayon en mètres" name="rayon" type="text" v-model="localRayon">
     </slot>
     <slot name="buttons">
       <DefaultButton label="Rechercher"/>
+      <DefaultButton label="générer votre rapport"/>
     </slot>
   </form>
 </template>
 <script setup lang="ts">
 
 import DefaultButton from "./DefaultButton.vue";
+import { ref, defineEmits, defineProps, watch } from 'vue';
+
+const props = defineProps<{
+  longitude?: number,
+  latitude?: number,
+  rayon?: number
+}>()
 
 const emit = defineEmits<{
-  (event: 'submit', formValue :Record<string, any>[] ): void
+  (event: 'submitForm', {  } ): void
 }>()
+const localLongitude = ref<number>(props.longitude)
+const localLatitude = ref<number>(props.latitude)
+const localRayon = ref<number>(props.rayon)
+
+watch(props, (newValue, oldValue) => {
+  localLongitude.value = newValue.longitude
+  localLatitude.value = newValue.latitude
+  localRayon.value = newValue.rayon
+})
+
+
 const handleSubmit = () => {
-  let results: Record<string, any>[] = []
-
-  let resultTemp: Record<string, any>;
-
-  for (let i = 0; i < event.target.length; i++) {
-
-    if (event.target[i].tagName === 'INPUT' && event.target[i].name !== '') {
-      resultTemp = {
-        name: event.target[i].name,
-        value: event.target[i].value
-      }
-      results.push(resultTemp)
-    }
-  }
-  emit('submit', results)
+  emit('submitForm', {longitude:localLongitude.value, latitude:localLatitude.value,rayon: localRayon.value})
+  console.log(localLongitude.value, localLatitude.value, localRayon.value)
 };
+
+// const emit = defineEmits<{
+//   (event: 'submit', formValue :Record<string, any>[] ): void
+// }>()
+// const handleSubmit = () => {
+//   let results: Record<string, any>[] = []
+//
+//   let resultTemp: Record<string, any>;
+//
+//   for (let i = 0; i < event.target.length; i++) {
+//
+//     if (event.target[i].tagName === 'INPUT' && event.target[i].name !== '') {
+//       resultTemp = {
+//         name: event.target[i].name,
+//         value: event.target[i].value
+//       }
+//       results.push(resultTemp)
+//     }
+//   }
+//   emit('submit', results)
+// };
 
 </script>
 
