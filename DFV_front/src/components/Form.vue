@@ -14,7 +14,7 @@
     <slot name="buttons">
       <DefaultButton type="input" label="Rechercher"/>
       <DefaultButton type="button" label="utliser ma position actuel" :click="handleUpdateCurentLocation"/>
-      <DefaultButton type='button' label="générer votre rapport" />
+      <DefaultButton type='button' label="générer votre rapport" @click="handleGenerateReport" />
     </slot>
   </form>
 </template>
@@ -22,6 +22,9 @@
 
 import DefaultButton from "./DefaultButton.vue";
 import { ref, defineEmits, defineProps, watch } from 'vue';
+import {useRequest} from '../services/requests';
+
+
 
 const props = defineProps<{
   longitude?: number,
@@ -33,6 +36,7 @@ const emit = defineEmits<{
   (event: 'submitForm', {  } ): void
   (event: 'getLocalisation',{} ): void
 }>()
+const request = useRequest()
 const localLongitude = ref<number>(props.longitude ?? 0)
 const localLatitude = ref<number>(props.latitude ?? 0)
 const localRayon = ref<number>(props.rayon ?? 0)
@@ -42,6 +46,10 @@ watch(props, (newValue, oldValue) => {
   localLatitude.value = newValue.latitude
   localRayon.value = newValue.rayon
 })
+
+const handleGenerateReport = () => {
+  request.downloadPdf()
+}
 
 const handleUpdateCurentLocation = () => {
   emit('getLocalisation')
