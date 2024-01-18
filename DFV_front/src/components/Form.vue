@@ -14,7 +14,7 @@
     <slot name="buttons">
       <DefaultButton type="input" label="Rechercher"/>
       <DefaultButton type="button" label="utliser ma position actuel" :click="handleUpdateCurentLocation"/>
-      <DefaultButton type='button' label="générer votre rapport" />
+      <DefaultButton type='button' label="générer votre rapport" @click="dowloadempPDf()" />
     </slot>
   </form>
 </template>
@@ -22,6 +22,9 @@
 
 import DefaultButton from "./DefaultButton.vue";
 import { ref, defineEmits, defineProps, watch } from 'vue';
+import {useRequest} from '../services/requests';
+
+
 
 const props = defineProps<{
   longitude?: number,
@@ -33,6 +36,7 @@ const emit = defineEmits<{
   (event: 'submitForm', {  } ): void
   (event: 'getLocalisation',{} ): void
 }>()
+const request = useRequest()
 const localLongitude = ref<number>(props.longitude ?? 0)
 const localLatitude = ref<number>(props.latitude ?? 0)
 const localRayon = ref<number>(props.rayon ?? 0)
@@ -43,37 +47,52 @@ watch(props, (newValue, oldValue) => {
   localRayon.value = newValue.rayon
 })
 
+async function dowloadempPDf () {
+
+  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+    .then(response => {
+      // Vérifie si la requête a réussi
+      if (!response.ok) {
+        throw new Error('La requête a échoué avec le statut ' + response.status);
+      }
+      // Parse la réponse en JSON
+      return response.json();
+    })
+    .then(data => {
+      console.log('Données reçues:', data);
+      // Traitez ici les données reçues
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données:', error);
+    });
+}
+
+const handleGenerateReport = () => {
+
+  // request.downloadPdf()
+}
+
 const handleUpdateCurentLocation = () => {
   emit('getLocalisation')
 }
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+    .then(response => {
+      // Vérifie si la requête a réussi
+      if (!response.ok) {
+        throw new Error('La requête a échoué avec le statut ' + response.status);
+      }
+      // Parse la réponse en JSON
+      return response.json();
+    })
+    .then(data => {
+      console.log('Données reçues:', data);
+      // Traitez ici les données reçues
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données:', error);
+    });
   emit('submitForm', {longitude:localLongitude.value, latitude:localLatitude.value,rayon: localRayon.value})
   console.log(localLongitude.value, localLatitude.value, localRayon.value)
 };
-
-// const emit = defineEmits<{
-//   (event: 'submit', formValue :Record<string, any>[] ): void
-// }>()
-// const handleSubmit = () => {
-//   let results: Record<string, any>[] = []
-//
-//   let resultTemp: Record<string, any>;
-//
-//   for (let i = 0; i < event.target.length; i++) {
-//
-//     if (event.target[i].tagName === 'INPUT' && event.target[i].name !== '') {
-//       resultTemp = {
-//         name: event.target[i].name,
-//         value: event.target[i].value
-//       }
-//       results.push(resultTemp)
-//     }
-//   }
-//   emit('submit', results)
-// };
-
 </script>
-
-<style scoped lang="scss">
-
-</style>

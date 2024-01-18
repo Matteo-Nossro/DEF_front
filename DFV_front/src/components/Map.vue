@@ -84,9 +84,6 @@ const displayUserLocation = (position: GeolocationPosition): void => {
     map.value.flyTo({ center: userCoordinates, zoom: 12 });
     placeMarker({ lngLat: { lng: userCoordinates[0], lat: userCoordinates[1] } })
     setCircleRadius(radius.value);
-
-    // new maplibregl.Marker().setLngLat(userCoordinates).addTo(map.value);
-
   }
 };
 

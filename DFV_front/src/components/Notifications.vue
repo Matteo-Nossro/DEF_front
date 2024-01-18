@@ -16,7 +16,7 @@ const props = defineProps({
 });
 
 const emits = defineEmits<{
-  (event: 'close', {  } ): void
+  (event: 'close'): void
 }>()
 
 const localDisplay = ref<boolean>(props.display)
@@ -24,7 +24,7 @@ const localDisplay = ref<boolean>(props.display)
 setInterval(
   () => {
     localDisplay.value = false
-    emits('close', {})
+    emits('close')
   },
   3000,
 )
@@ -44,7 +44,6 @@ setInterval(
   transition: all 0.5s ease;
   opacity: 1;
   transform: translateY(-100%);
-  z-index: 1000;
 
   &.Success {
     background-color: #4caf50;
