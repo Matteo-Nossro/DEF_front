@@ -14,7 +14,7 @@
     <slot name="buttons">
       <DefaultButton type="input" label="Rechercher"/>
       <DefaultButton type="button" label="utliser ma position actuel" :click="handleUpdateCurentLocation"/>
-      <DefaultButton type='button' label="générer votre rapport" @click="handleGenerateReport" />
+      <DefaultButton type='button' label="générer votre rapport" @click="dowloadempPDf()" />
     </slot>
   </form>
 </template>
@@ -47,14 +47,51 @@ watch(props, (newValue, oldValue) => {
   localRayon.value = newValue.rayon
 })
 
+async function dowloadempPDf () {
+
+  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+    .then(response => {
+      // Vérifie si la requête a réussi
+      if (!response.ok) {
+        throw new Error('La requête a échoué avec le statut ' + response.status);
+      }
+      // Parse la réponse en JSON
+      return response.json();
+    })
+    .then(data => {
+      console.log('Données reçues:', data);
+      // Traitez ici les données reçues
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données:', error);
+    });
+}
+
 const handleGenerateReport = () => {
-  request.downloadPdf()
+
+  // request.downloadPdf()
 }
 
 const handleUpdateCurentLocation = () => {
   emit('getLocalisation')
 }
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+    .then(response => {
+      // Vérifie si la requête a réussi
+      if (!response.ok) {
+        throw new Error('La requête a échoué avec le statut ' + response.status);
+      }
+      // Parse la réponse en JSON
+      return response.json();
+    })
+    .then(data => {
+      console.log('Données reçues:', data);
+      // Traitez ici les données reçues
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données:', error);
+    });
   emit('submitForm', {longitude:localLongitude.value, latitude:localLatitude.value,rayon: localRayon.value})
   console.log(localLongitude.value, localLatitude.value, localRayon.value)
 };
