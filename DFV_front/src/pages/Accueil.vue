@@ -1,17 +1,11 @@
 <template>
   <section>
     <Map />
-<!--    <div class="form-container">-->
-<!--      <Form />-->
-<!--    </div>-->
   </section>
 </template>
 
 <script setup lang="ts">
-// import Form from "../components/Form.vue";
 import Map from '../components/Map.vue';
-
-
 </script>
 
 <style scoped lang="scss">

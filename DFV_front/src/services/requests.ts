@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 // ça c'est si on générais le pdf en front
 // export interface DVF{
 //   id: number;

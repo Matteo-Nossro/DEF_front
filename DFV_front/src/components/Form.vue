@@ -58,30 +58,4 @@ const handleSubmit = () => {
   emit('submitForm', {longitude:localLongitude.value, latitude:localLatitude.value,rayon: localRayon.value})
   console.log(localLongitude.value, localLatitude.value, localRayon.value)
 };
-
-// const emit = defineEmits<{
-//   (event: 'submit', formValue :Record<string, any>[] ): void
-// }>()
-// const handleSubmit = () => {
-//   let results: Record<string, any>[] = []
-//
-//   let resultTemp: Record<string, any>;
-//
-//   for (let i = 0; i < event.target.length; i++) {
-//
-//     if (event.target[i].tagName === 'INPUT' && event.target[i].name !== '') {
-//       resultTemp = {
-//         name: event.target[i].name,
-//         value: event.target[i].value
-//       }
-//       results.push(resultTemp)
-//     }
-//   }
-//   emit('submit', results)
-// };
-
 </script>
-
-<style scoped lang="scss">
-
-</style>
