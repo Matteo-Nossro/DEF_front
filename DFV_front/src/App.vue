@@ -6,7 +6,7 @@
   import {onMounted,ref} from "vue";
 
   // TODO : remplacer la variable VITE_SOCKET_ENDPOINT par l'url de l'api
-  const websocketUrl = 'http://localhost:8081/api/transactions/subscribe';
+  const websocketUrl = 'ws://localhost:8081/api/transactions/subscribe';
 
   const ws = ref<WebSocket | null>  (null);
   const connect = () => {
@@ -16,7 +16,7 @@
       const message = JSON.parse(event.data);
       console.log('message du webscoket',message)
 
-      // ToDO: // faire un traitement sur le message reçu
+      // TODO: // faire un traitement sur le message reçu
     };
 
     ws.value.onerror = error => {
