@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "maplibre-gl": "^3.6.2",
     "vue": "^3.3.11",
     "vuex": "^4.0.2"

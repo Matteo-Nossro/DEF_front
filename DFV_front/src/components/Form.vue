@@ -49,7 +49,7 @@ watch(props, (newValue, oldValue) => {
 
 async function dowloadempPDf () {
 
-  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+  const response = await fetch('http://localhost:8080/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
     .then(response => {
       // Vérifie si la requête a réussi
       if (!response.ok) {
@@ -76,7 +76,7 @@ const handleUpdateCurentLocation = () => {
   emit('getLocalisation')
 }
 const handleSubmit = async () => {
-  const response = await fetch('http://localhost:8081/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
+  const response = await fetch('http://localhost:8080/api/transactions/generatePdf?latitude=46.247458&longitude=6.019949&radius=1000')
     .then(response => {
       // Vérifie si la requête a réussi
       if (!response.ok) {
